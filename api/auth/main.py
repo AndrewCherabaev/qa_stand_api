@@ -37,7 +37,11 @@ async def register(
     return user
 
 
-@auth_router.post("/login", description="Логин", response_model=AuthLoginResponse)
+@auth_router.post(
+    "/login",
+    description="Логин",
+    response_model=AuthLoginResponse
+)
 async def login(_request: AuthLoginRequest) -> NoReturn:
     raise HTTPException(
         status_code=304,

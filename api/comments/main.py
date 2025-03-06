@@ -1,6 +1,6 @@
 from typing import List, Annotated
 
-from fastapi import APIRouter, Cookie
+from fastapi import APIRouter, Cookie, HTTPException
 
 from api.comments.models import CommentCreateRequest, CommentResponse
 from api.database.database import Repository
@@ -42,6 +42,9 @@ async def create_comments(
 ):
     token = tokens_repo.find(AuthToken.token == auth_token)
     user = users_repo.find(User.token_id == token.id)
+
+    if not user.is_comments_available:
+        raise HTTPException(400, "Недостаточно прав для коммантариев")
 
     comment = Comment(
         author_id=user.id,

@@ -56,7 +56,7 @@ async def create_post(
 
         tokens_repo.delete(AuthToken.token == auth_token)
 
-        return JSONResponse({"detail": "Internal Server Error"}, 500)
+        raise HTTPException(500, "Превышен лимит публикации для бесплатного тарифа")
 
     post = Post(
         title=request.title,
@@ -111,7 +111,7 @@ async def like_post(
 
 @posts_router.post(
     "/{post_id}/dislikes",
-    description="""Дизайкнуть пост""",
+    description="Дизайкнуть пост",
     response_model=OkResponse | PostReactionCreateResponse
 )
 async def dislike_post(
